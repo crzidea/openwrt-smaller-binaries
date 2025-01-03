@@ -24,11 +24,12 @@ jobs:
 
     - name: Build
       run: |
-        curl https://api.github.com/repos/tailscale/tailscale/releases/latest | jq ".tarball_url" --raw-output | xargs wget --output-file tailscale.tar.gz
+        curl https://api.github.com/repos/tailscale/tailscale/releases/latest | jq ".tarball_url" --raw-output | xargs wget -O tailscale.tar.gz
         tar xzf tailscale.tar.gz
-        cd tailscale
+        cd tailscale-*
         GOOS=linux GOARCH=arm64 go build -o tailscale.combined -tags ts_include_cli,ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube -ldflags="-s -w" ./cmd/tailscaled
-        curl https://api.github.com/repos/upx/upx/releases/latest | jq '.assets[] | select(.name | test("-amd64_linux.tar.xz$")) | .browser_download_url' --raw-output | xargs wget
+        mv tailscale.combined ../
+        curl https://api.github.com/repos/upx/upx/releases/latest | jq '.assets[] | select(.name | test("-amd64_linux.tar.xz$")) | .browser_download_url' --raw-output | xargs wget        
         tar xzf upx-*-amd64_linux.tar.xz
         upx-*/upx --lzma --best tailscale.combined
 
