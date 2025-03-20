@@ -30,12 +30,21 @@ jobs:
         GOOS=linux GOARCH=arm64 go build -o tailscale.combined -tags ts_include_cli,ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube -ldflags="-s -w" ./cmd/tailscaled
         mv tailscale.combined ../
         cd ..
+        curl https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq '.assets[] | select(.name | test("-linux-arm64-.*.gz")) | .browser_download_url' --raw-output xargs wget
+        mv mihomo-*.gz mihomo.gz
+        gunzip mihomo.gz
+        chmox +x mihomo
         curl https://api.github.com/repos/upx/upx/releases/latest | jq '.assets[] | select(.name | test("-amd64_linux.tar.xz$")) | .browser_download_url' --raw-output | xargs wget        
         tar xf upx-*.tar.xz
         upx-*/upx --lzma --best tailscale.combined
+        upx-*/upx --lzma --best mihomo
 
     - uses: actions/upload-artifact@v4
       with:
-        name: tailscale.combined
+        name: tailscaled
         path: tailscale.combined
+    - uses: actions/upload-artifact@v4
+      with:
+        name: mihomo
+        path: mihomo
 
