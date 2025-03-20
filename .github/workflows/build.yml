@@ -36,7 +36,7 @@ jobs:
         chmox +x mihomo
         curl https://api.github.com/repos/upx/upx/releases/latest | jq '.assets[] | select(.name | test("-amd64_linux.tar.xz$")) | .browser_download_url' --raw-output | xargs wget        
         tar xf upx-*.tar.xz
-        upx-*/upx --lzma --best tailscale.combined
+        upx-*/upx --lzma --best tailscaled
         upx-*/upx --lzma --best mihomo
 
     - uses: actions/upload-artifact@v4
