@@ -1,17 +1,31 @@
 #!/bin/bash
 
 # Usage: ./deploy.sh [user@host]
-# Example: ./deploy.sh root@192.168.2.1
-# Or: REMOTE=root@192.168.2.1 ./deploy.sh
+# Example: ./deploy.sh root@192.168.1.1
+# Or: REMOTE=root@192.168.1.1 ./deploy.sh
 
 # Use first argument if provided, otherwise check REMOTE env var
 TARGET="${1:-$REMOTE}"
 
 if [ -z "$TARGET" ]; then
-    echo "❌ Error: Remote target is required."
-    echo "Usage: $0 <user@host>"
-    echo "   or: REMOTE=<user@host> $0"
-    exit 1
+    # Try to auto-detect the default gateway
+    GATEWAY=$(netstat -rn 2>/dev/null | awk '/^default/ {print $2; exit}' | head -n1)
+    
+    if [ -n "$GATEWAY" ]; then
+        DEFAULT_TARGET="root@$GATEWAY"
+        read -p "Target not specified. Deploy to default gateway [$DEFAULT_TARGET]? (y/N) " confirm
+        if [[ "$confirm" =~ ^[Yy]$ ]]; then
+            TARGET="$DEFAULT_TARGET"
+        else
+            echo "❌ Deployment cancelled."
+            exit 1
+        fi
+    else
+        echo "❌ Error: Remote target is required and could not be auto-detected."
+        echo "Usage: $0 <user@host>"
+        echo "   or: REMOTE=<user@host> $0"
+        exit 1
+    fi
 fi
 
 TEMP_DIR="/tmp/deploy_$(date +%s)"
