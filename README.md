@@ -4,11 +4,11 @@ This repository provides slimmed-down builds of popular tools like Tailscale and
 
 ## How to use the artifacts
 
-1. Download the `artifact.tar.gz` from the GitHub Actions build.
+1. Download the `artifacts.tar.gz` from the GitHub Actions build.
 2. Extract the archive on your local machine:
    ```sh
-   tar xzf artifact.tar.gz
-   cd artifact/
+   tar xzf artifacts.tar.gz
+   cd artifacts/
    ```
 3. Deploy the binaries to your OpenWrt device using the included script:
    ```sh

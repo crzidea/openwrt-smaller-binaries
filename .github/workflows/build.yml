@@ -38,14 +38,14 @@ jobs:
         tar xf upx-*.tar.xz
         upx-*/upx --lzma --best tailscaled
         upx-*/upx --lzma --best mihomo
-        mkdir -p artifact/usr/sbin
-        mv tailscaled artifact/usr/sbin
-        mkdir -p artifact/etc/openclash/core
-        mv mihomo artifact/etc/openclash/core/clash_meta
-        cp deploy.sh artifact/
-        tar czf artifact.tar.gz artifact
+        mkdir -p artifacts/usr/sbin
+        mv tailscaled artifacts/usr/sbin
+        mkdir -p artifacts/etc/openclash/core
+        mv mihomo artifacts/etc/openclash/core/clash_meta
+        cp deploy.sh artifacts/
+        tar czf artifacts.tar.gz artifacts
 
     - uses: actions/upload-artifact@v4
       with:
-        name: artifact.tar.gz
-        path: artifact.tar.gz
+        name: artifacts.tar.gz
+        path: artifacts.tar.gz
