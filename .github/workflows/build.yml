@@ -42,6 +42,7 @@ jobs:
         mv tailscaled artifact/usr/sbin
         mkdir -p artifact/etc/openclash/core
         mv mihomo artifact/etc/openclash/core/clash_meta
+        cp deploy.sh artifact/
         tar czf artifact.tar.gz artifact
 
     - uses: actions/upload-artifact@v4
