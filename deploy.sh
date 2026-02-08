@@ -42,7 +42,6 @@ ssh "$TARGET" "
         mkdir -p \"/\$(dirname \"\$file\")\"
         # mv -f avoids 'Text file busy' by replacing the directory entry
         mv -f \"\$file\" \"/\$file\"
-        chmod +x \"/\$file\" 2>/dev/null || true
     done
 
     # Cleanup
